@@ -7,9 +7,6 @@
 //createNode
 //traverse
 
-//first we create the struct Node
-//then typedef the struct Node to just Node
-
 struct Node {
     int data;
     struct Node* next;
@@ -17,7 +14,6 @@ struct Node {
 
 typedef struct Node Node;
 
-//then we can start with the createNode function
 Node* createNode(int data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
@@ -26,12 +22,7 @@ Node* createNode(int data) {
 
 }
 
-// then we do the traverselinkedlist function
-// when creating this function we need to create two objects:
-// the head and a temporary obj that acts like the cursor
-// the cursor starts at the head so we equate it to head and then create a while loop that allows it to traverse 
-
-Node* head = NULL;      //initially we set head to NULL
+Node* head = NULL;      
 
 void traverseLL(){
     printf("[ ");
@@ -47,9 +38,8 @@ void traverseLL(){
 
 //to do:
 //deleteNode
-//updateNode
-
-
+//addNode
+//reverselinkedlist
 
 void deleteNode(int key){
     Node* cursor = head;
