@@ -7,12 +7,6 @@ struct Node{
     struct Node* prev;
 };
 
-//createNode
-//insertAtHead
-//traverseLL
-//deleteNode
-//addNdde
-//reverseLL
 
 typedef struct Node Node;
 
@@ -60,6 +54,7 @@ void traverseLL(){
     printf("] \n");
 }
 
+// deletes a node
 void delNode(int key){
     Node* cursor = head;
     Node* prev = cursor->prev;
@@ -78,6 +73,7 @@ void delNode(int key){
     
 }
 
+// adds a new node
 void addNode(int key){
     Node* cursor = head;
 
@@ -94,21 +90,7 @@ void addNode(int key){
 
 }
 
-
-/*
-[NULL
-Node: 0
-Node: 2     Node prev: 0
-Node: 4     Node prev: 2
-Node: 6     Node prev: 4
-Node: 8     Node prev: 6
-Node: 10     Node prev: 8
-Node: 12     Node prev: 10
-Node: 14     Node prev: 12
-Node: 16     Node prev: 14
-Node: 18     Node prev: 16
- NULL ]
-*/
+// reverses a linked list
 void revLL(){
     Node* cursor = head;
     while (cursor != NULL){
