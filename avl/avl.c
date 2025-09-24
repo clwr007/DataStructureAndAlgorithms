@@ -9,7 +9,7 @@ struct Node {
     int data;
     struct Node* lc;
     struct Node* rc;
-
+    int level;
 };
 
 typedef struct Node Node;
@@ -62,6 +62,7 @@ Node* createNode(int data){
 
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
+    newNode->level = 0;
     newNode->lc = NULL;
     newNode->rc = NULL;
 
@@ -154,32 +155,39 @@ void dfs(Node* node){
 }
 
 void bfs(Node* node){
-   Node* process_queue[100];
-   size_t process_queue_num = 0;
+    node->level = 0;
 
-   process_queue[0] = node;
-   process_queue_num++;
+    printf("\nbfs: ");
+    Node* process_queue[100];
+    size_t process_queue_num = 0;
+ 
+    process_queue[0] = node;
+    node->level = 0;
+    process_queue_num++;
 
-   while (process_queue_num > 0){
-    Node* cursor = process_queue[0];
-    int i;
-    for (i = 0; i< process_queue_num -1; i++){
+    while (process_queue_num > 0){
+        Node* cursor = process_queue[0];
+        int i;
+        for (i = 0; i< process_queue_num -1; i++){
         process_queue[i] = process_queue[i+1];
-    }
-    process_queue_num--;
+        }
+        
+        process_queue_num--;
 
-    printf("%d , ", cursor->data);
+        printf("%d [%d], ", cursor->data, cursor->level);
 
-    if (cursor->lc != NULL){
-        process_queue[process_queue_num] = cursor->lc;
-        process_queue_num++;
-    }
+        if (cursor->lc != NULL){
+            cursor->lc->level = cursor->level+1;
+            process_queue[process_queue_num] = cursor->lc;
+            process_queue_num++;
+        }
 
-    if (cursor->rc != NULL){
-        process_queue[process_queue_num] = cursor->rc;
-        process_queue_num++;
-    }
-
+        if (cursor->rc != NULL){
+            cursor->lc->level = cursor->level+1;
+            process_queue[process_queue_num] = cursor->rc;
+            process_queue_num++;
+        }
+ 
    }
 
 }
@@ -192,7 +200,7 @@ int max(int a,int b){
 
 int findHeight(Node* node){
 
-    if (node == NULL) return 0;
+    if (node == NULL) return -1;
 
     int h1 = findHeight(node->lc);
     int h2 = findHeight(node->rc);
@@ -204,6 +212,7 @@ int findHeight(Node* node){
 
 
 void buildtree(Node* node , int number){
+
     if (number > node->data){
         if (node->rc == NULL){
             
@@ -226,84 +235,26 @@ void buildtree(Node* node , int number){
 
 
 void main(){
+
     Node* root = NULL;
+    int key = -1;
 
-    Node* node20 = createNode(20);
-    Node* node10 = createNode(10);
-    Node* node25 = createNode(25);
-    Node* node7 = createNode(7);
-    Node* node11 = createNode(11);
-    Node* node21 = createNode(21);
-    Node* node27 = createNode(27);
+    while(1)
+    {
+        printf("\nEnter key to add to tree (or -1 to stop):");
+        scanf("%d", &key);
+        if(key == -1) break;
+        if(root == NULL) {
+            root = createNode(key);
+        }
+        else {
+            buildtree(root, key);
+        }
 
-    node20->lc = node10;
-    node20->rc = node25;
-
-    node10->lc = node7;
-    node10->rc = node11;
-
-    node25->lc = node21;
-    node25->rc = node27;
-
-    node7->lc = NULL;
-    node7->rc = NULL;
-
-    node11->lc = NULL;
-    node11->rc = NULL;
-
-    node21->lc = NULL;
-    node21->rc = NULL;
-
-    node27->lc = NULL;
-    node27->rc = NULL;
-
-    /*
-    traverseTreeInorder2(node20);
-    printf("\n");
-    
-    traverseTreeInorder(node20);
-    printf("\n");
-    traverseTreePreorder(node20);
-    printf("\n");
-    traverseTreePostorder(node20);
-    
-
-    Node* node2Find = findNode(10, node20);
-    if (node2Find != NULL){
-        printf("Node found, data stored in that node is: %d", node2Find->data);
-    }else{
-        printf("Node not found");
     }
-
-    */
-
-
-
-    //-------------------------------------------------
-
-
-
-    /*
-            20
-           /   \ 
-          10    25
-         / \    / \
-        7  11  21  27
     
-    */
-
-
-    int h = findHeight(node20);
-    printf("h=%d", h);
-
+    printf("\nTree: %n");
+    traverseTreeInorder(root);
     
-    printf("this is bfs: \n");
-    bfs(node20);
-
-    /*
-    printf("\n");
-    printf("this is dfs: \n");
-    dfs(node20);
-   
-    */
+    bfs(root);
 }
