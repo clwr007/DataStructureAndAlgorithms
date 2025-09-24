@@ -192,6 +192,12 @@ void bfs(Node* node){
 
 }
 
+void rotateRight(Node* root)
+{
+
+}
+
+
 int max(int a,int b){
     if(a>b) return a;
     if(b>a) return b;
