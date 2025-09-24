@@ -183,7 +183,7 @@ void bfs(Node* node){
         }
 
         if (cursor->rc != NULL){
-            cursor->lc->level = cursor->level+1;
+            cursor->rc->level = cursor->level+1;
             process_queue[process_queue_num] = cursor->rc;
             process_queue_num++;
         }
@@ -253,7 +253,7 @@ void main(){
 
     }
     
-    printf("\nTree: %n");
+    printf("\nTree: \n");
     traverseTreeInorder(root);
     
     bfs(root);
