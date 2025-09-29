@@ -135,7 +135,8 @@ struct Node* nodeinsertion(struct Node* root, int key ){
 
 }
 
-int main(){
+int main()
+{
 
     /*
 
