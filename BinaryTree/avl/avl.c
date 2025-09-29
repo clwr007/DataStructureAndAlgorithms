@@ -41,6 +41,48 @@ Node* createNode(int key){
     return node;
 }
 
+
+
+void bfs(Node* node){
+    node->height = 0;
+
+    printf("\nbfs: ");
+    Node* process_queue[100];
+    size_t process_queue_num = 0;
+ 
+    process_queue[0] = node;
+    node->height = 0;
+    process_queue_num++;
+
+    while (process_queue_num > 0){
+        Node* cursor = process_queue[0];
+        int i;
+        for (i = 0; i< process_queue_num -1; i++){
+        process_queue[i] = process_queue[i+1];
+        }
+        
+        process_queue_num--;
+
+        printf("%d [%d], ", cursor->data, cursor->height);
+
+        if (cursor->lc != NULL){
+            cursor->lc->height = cursor->height+1;
+            process_queue[process_queue_num] = cursor->lc;
+            process_queue_num++;
+        }
+
+        if (cursor->rc != NULL){
+            cursor->rc->height = cursor->height+1;
+            process_queue[process_queue_num] = cursor->rc;
+            process_queue_num++;
+        }
+ 
+   }
+
+}
+
+
+
 int getBalfac(Node* node){
     if (node == NULL) return 0;
     return findHeight(node->lc) - findHeight(node->rc);
@@ -77,6 +119,7 @@ Node* leftRotate(struct Node* root){
     return rootrc; //returning the new root node
 
 }
+
 
 struct Node* nodeinsertion(struct Node* root, int key ){
 
@@ -132,8 +175,17 @@ struct Node* nodeinsertion(struct Node* root, int key ){
 
     }
 
+    return root;
 
 }
+
+// yy - yank/copy
+// dd - delete line
+// n-yy: nopy n lines, likewise for n-dd
+// ESC - escape mode
+// i - edit
+// ESC -> :w
+
 
 int main()
 {
@@ -164,3 +216,4 @@ int main()
     nodeinsertion(node3, 3);
 
 }
+
