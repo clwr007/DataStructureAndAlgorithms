@@ -9,6 +9,7 @@ struct Node {
     struct Node* lc;
     struct Node* rc;
     int height;
+    int level;
 
 };
 
@@ -44,14 +45,16 @@ Node* createNode(int key){
 
 
 void bfs(Node* node){
-    node->height = 0;
+
+    node->level = 0;
 
     printf("\nbfs: ");
     Node* process_queue[100];
     size_t process_queue_num = 0;
+
  
     process_queue[0] = node;
-    node->height = 0;
+    node->level = 0;
     process_queue_num++;
 
     while (process_queue_num > 0){
@@ -63,16 +66,16 @@ void bfs(Node* node){
         
         process_queue_num--;
 
-        printf("%d [%d], ", cursor->data, cursor->height);
+        printf("%d [%d], ", cursor->data, cursor->level);
 
         if (cursor->lc != NULL){
-            cursor->lc->height = cursor->height+1;
+            cursor->lc->level = cursor->level+1;
             process_queue[process_queue_num] = cursor->lc;
             process_queue_num++;
         }
 
         if (cursor->rc != NULL){
-            cursor->rc->height = cursor->height+1;
+            cursor->rc->level = cursor->level+1;
             process_queue[process_queue_num] = cursor->rc;
             process_queue_num++;
         }
@@ -98,8 +101,15 @@ Node* rightRotate(struct Node* root){
     rootlc->rc = root;
     root->lc = lcrc;
 
-    root->height = max(root->rc->height,root->lc->height);
-    rootlc->height = max(rootlc->rc->height,rootlc->lc->height);   
+    root->height =1+ max(
+        ((root->rc!= NULL)? root->rc->height:-1),
+        ((root->lc!= NULL)? root->lc->height:-1)
+        );
+    rootlc->height =1+ max(
+        ((rootlc->rc != NULL)?rootlc->rc->height:-1),
+        ((rootlc->lc != NULL)?rootlc->lc->height:-1)
+        );   
+
     
     return rootlc; //returning the new root node
 
@@ -113,10 +123,17 @@ Node* leftRotate(struct Node* root){
     rootrc->lc = root;
     root->rc = rclc;
 
-    root->height = max(root->rc->height,root->lc->height);
-    rootrc->height = max(rootrc->rc->height,rootrc->lc->height);   
+    root->height = 1+ max(
+          ((root->rc != NULL)? root->rc->height: -1),
+          ((root->lc != NULL)? root->lc->height: -1)
+          );
+
+    rootrc->height = 1 + max(
+          ((rootrc->rc != NULL)? rootrc->rc->height: -1),
+          ((rootrc->lc != NULL)? rootrc->lc->height: -1)
+          );   
     
-    return rootrc; //returning the new root node
+return rootrc; //returning the new root node
 
 }
 
@@ -141,16 +158,19 @@ struct Node* nodeinsertion(struct Node* root, int key ){
     // when we get the balance factor there are now 4 cases to consider
     // LL RR LR RL      (left left, right right, left right, right left)
 
+    Node* newRoot = root;
     // CASE 1 LL
-    if (balfactor >1 && key < root->lc->data) rightRotate(root);
-
+    if (balfactor >1 && key < root->lc->data) {
+      newRoot = rightRotate(root);
+    }
     // CASE 2 RR
-    if (balfactor <-1 && key > root->rc->data) leftRotate(root);
-
+    else if (balfactor <-1 && key > root->rc->data) {
+      newRoot = leftRotate(root);
+    }
     // CASE 3 LR
-    if (balfactor >1 && key > root->lc->data){
+    else if (balfactor >1 && key > root->lc->data){
         root->lc = leftRotate(root->lc);        // the first imbalanced node's child will be leftrotated
-        rightRotate(root);                      // then the first imbalanced node itself will be rightrotated
+        newRoot = rightRotate(root);                      // then the first imbalanced node itself will be rightrotated
 
         /*  
             i will use * to denote about what node the rotations are happnening
@@ -166,16 +186,13 @@ struct Node* nodeinsertion(struct Node* root, int key ){
 
         */
     }
-
-
     // CASE 4 RL
-    if (balfactor <-1 && key < root->rc->data){
+    else if (balfactor <-1 && key < root->rc->data){
         root->rc = leftRotate(root->lc);
-        rightRotate(root);
-
+        newRoot = rightRotate(root);
     }
 
-    return root;
+    return newRoot;
 
 }
 
@@ -207,13 +224,13 @@ int main()
           1   3         //level (1)
     
     */
-    Node* node1 = NULL;
-    Node* node2 = NULL;
-    Node* node3 = NULL;
+    Node* root = NULL;
 
-    nodeinsertion(node1, 1);
-    nodeinsertion(node2, 2);
-    nodeinsertion(node3, 3);
+    root = nodeinsertion(root, 1);
+    root = nodeinsertion(root, 2);
+    root = nodeinsertion(root, 3);
 
+
+    bfs(root);
 }
 

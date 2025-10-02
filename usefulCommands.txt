@@ -1,0 +1,28 @@
+
+GVIM/NEOVIM commands
+====================
+
+yy - yank/copy
+dd - delete line
+n-yy: nopy n lines, likewise for n-dd
+ESC - escape mode
+i - edit
+ESC -> :w
+
+
+gcc/g++ commands
+=================
+
+gcc - gnu c compiler
+g++ - gnu c++ compiler
+
+compile:
+	gcc file.c
+	g++ file.cpp
+
+selecting execetutable name - default is a.out
+	gcc -o avl avl.c
+
+run:
+	./a.out
+
